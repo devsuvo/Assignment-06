@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: dark --default;
+}
+
+@theme inline {
+  /* FitLog colors (Figma theke) */
+  --color-neon: #c2f800;
+  --color-neon-soft: #1a2312;
+  --color-ink: #0f1115;
+  --color-header: #0c0d10;
+  --color-line: #1c1f26;
+  --color-pill-line: #2d313b;
+  --color-muted: #9ca3af;
+  --color-soft: #d1d5db;
+    --color-card: #15171d;
+  --color-card-line: #222630;
+    --color-divider: #20242e;
+      --color-media: #171a21;
+  --color-panel: #151922;
+  --color-panel-line: #232834;
+  --color-row-line: #1e2330;
+  --color-light: #e5e7eb;
+  --color-btn-line: #374151;
+
+  /* Fonts */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-oswald);
+}
+
+body {
+  background-color: #0f1115;
+  color: #ffffff;
+}
+html {
+  scroll-behavior: smooth;
+}
