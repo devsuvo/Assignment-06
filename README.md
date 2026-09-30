@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🏋️ FitLog — Workout Library
 
-## Getting Started
+**Train with intent. Log every set.**
 
-First, run the development server:
+FitLog is a dark, no-nonsense gym companion built with Next.js. Browse a library of twelve lifts covering every major muscle group, check the details of each exercise, lock up to five lifts into today's plan, save others for later, and watch the day's minutes and calories add up.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+🔗 **Live Site:** _coming soon_
+
+---
+
+## ✨ Key Features
+
+1. **Workout Library** — 12 workouts fetched from a live API, shown as responsive cards (3×4 grid on desktop) with muscle group tags, equipment, duration, calories, and rating.
+2. **Workout Details Page** — dynamic route (`/workouts/[id]`) with a large illustration, key specs panel (equipment, difficulty, sets, reps, duration, calories, rating), and step-by-step instructions.
+3. **Today's Plan (max 5)** — add workouts to today's plan with toast feedback; duplicates are blocked and the plan is capped at five lifts.
+4. **Save for Later** — bookmark workouts into a separate Saved tab, with live Plan and Saved counters in the navbar.
+5. **My Plan Dashboard** — live metrics (exercises, minutes, calories), Today's Plan / Saved tabs, sort by duration, calories, or rating, "Mark as Done", and remove actions.
+6. **Persistent Data** — plan, saved, and done items are stored in `localStorage`, so nothing is lost on refresh.
+7. **Fully Responsive** — works smoothly on mobile, tablet, and desktop.
+
+---
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| [Next.js 16](https://nextjs.org/) (App Router) | UI and page navigation |
+| [React 19](https://react.dev/) | Components, state, and Context API |
+| [Tailwind CSS 4](https://tailwindcss.com/) | Styling and responsiveness |
+| [daisyUI 5](https://daisyui.com/) | Component library (theme and loading spinner) |
+| [react-hot-toast](https://react-hot-toast.com/) | Toast notifications |
+| next/font (Oswald + Inter) | Optimized Google Fonts |
+| Vercel | Deployment |
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/
+│   ├── layout.js            # Root layout (Navbar, Footer, Providers)
+│   ├── page.js              # Home page (Hero + Library)
+│   ├── my-plan/page.js      # My Plan page
+│   └── workouts/[id]/page.js # Workout details page
+├── components/              # Navbar, Hero, WorkoutCard, PlanItem, Footer...
+├── context/PlanContext.jsx  # Global plan / saved / done state
+└── lib/api.js               # API helpers with backup endpoint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🚀 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Clone the repository
+git clone https://github.com/devsuvo/Assignment-06.git
+cd Assignment-06
 
-## Learn More
+# Install dependencies
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# Run the development server
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📡 API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- All workouts: `https://api.abcz.workers.dev/api/fitlog`
+- Single workout: `https://api.abcz.workers.dev/api/fitlog/:id`
+- Backup: `https://api.api-store.workers.dev/api/fitlog`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+© 2026 FitLog — Workout Library. Train hard, log honest.
