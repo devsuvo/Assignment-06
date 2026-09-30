@@ -26,18 +26,32 @@ function StarIcon() {
   );
 }
 
-export default function PlanItem({ workout, showDone, onDone, onRemove }) {
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+export default function PlanItem({ workout, showDone, isDone, onDone, onRemove }) {
   const { id, name, image, equipment, duration, caloriesBurned, rating } = workout;
 
   return (
-    <article className="flex flex-col gap-4 rounded-2xl border border-[#232732] bg-[#14171e] p-4 sm:flex-row sm:items-center sm:justify-between">
+    <article
+      className={`flex flex-col gap-4 rounded-2xl border bg-[#14171e] p-4 transition sm:flex-row sm:items-center sm:justify-between ${
+        isDone ? "border-neon/30" : "border-[#232732]"
+      }`}
+    >
       {/* Left: thumbnail + info */}
-      <div className="flex items-center gap-4">
+      <div className={`flex items-center gap-4 ${isDone ? "opacity-60" : ""}`}>
         <div className="relative h-20 w-36 shrink-0 overflow-hidden rounded-xl bg-[#1f2937]">
           <Image src={image} alt={name} fill sizes="144px" className="object-cover" />
         </div>
         <div className="flex min-w-0 flex-col gap-0.5">
-          <h2 className="font-display text-base font-bold uppercase tracking-[0.4px] text-white">{name}</h2>
+          <h2 className={`font-display text-base font-bold uppercase tracking-[0.4px] text-white ${isDone ? "line-through" : ""}`}>
+            {name}
+          </h2>
           <p className="text-xs font-semibold text-[#8a92a0]">{equipment}</p>
           <div className="flex flex-wrap items-center gap-3 pt-1.5 text-xs text-soft">
             <span className="flex items-center gap-1.5"><ClockIcon /> {duration} min</span>
@@ -56,17 +70,21 @@ export default function PlanItem({ workout, showDone, onDone, onRemove }) {
           View Details
         </Link>
 
-        {showDone && (
-          <button
-            onClick={() => onDone(workout)}
-            className="inline-flex items-center gap-1.5 rounded-full bg-neon px-4 py-2 text-xs font-semibold text-black transition hover:brightness-110"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 6 9 17l-5-5" />
-            </svg>
-            Mark as Done
-          </button>
-        )}
+        {showDone &&
+          (isDone ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-neon-soft px-4 py-2 text-xs font-semibold text-neon">
+              <CheckIcon />
+              Done
+            </span>
+          ) : (
+            <button
+              onClick={() => onDone(workout)}
+              className="inline-flex items-center gap-1.5 rounded-full bg-neon px-4 py-2 text-xs font-semibold text-black transition hover:brightness-110"
+            >
+              <CheckIcon />
+              Mark as Done
+            </button>
+          ))}
 
         <button
           onClick={() => onRemove(workout)}

@@ -12,18 +12,17 @@ const TABS = [
 ];
 
 const SORT_OPTIONS = [
-  { value: "default", label: "Default" },
   { value: "duration", label: "Duration" },
   { value: "calories", label: "Calories" },
   { value: "rating", label: "Rating" },
 ];
 
 export default function MyPlanPage() {
-  const { plan, saved, loaded, removeFromPlan, removeFromSaved } = usePlan();
+  const { plan, saved, loaded, isDone, markAsDone, removeFromPlan, removeFromSaved } = usePlan();
   const [activeTab, setActiveTab] = useState("plan");
   const [sortBy, setSortBy] = useState("duration");
 
-  // Metrics (shudhu Today's Plan theke)
+  // Metrics (Today's Plan theke)
   const totalMinutes = plan.reduce((sum, w) => sum + w.duration, 0);
   const totalCalories = plan.reduce((sum, w) => sum + w.caloriesBurned, 0);
 
@@ -33,21 +32,25 @@ export default function MyPlanPage() {
     { label: "Calories", value: totalCalories },
   ];
 
-  // Kon tab er list dekhabo + sort
+  // Current tab er list + sort
   const list = [...(activeTab === "plan" ? plan : saved)];
   if (sortBy === "duration") list.sort((a, b) => a.duration - b.duration);
   if (sortBy === "calories") list.sort((a, b) => b.caloriesBurned - a.caloriesBurned);
   if (sortBy === "rating") list.sort((a, b) => b.rating - a.rating);
 
   const handleDone = (workout) => {
-    removeFromPlan(workout.id);
-    toast.success(`${workout.name} done! Great work 💪`);
+    markAsDone(workout.id);
+    toast.success(`${workout.name} marked as done 💪`);
   };
 
   const handleRemove = (workout) => {
-    if (activeTab === "plan") removeFromPlan(workout.id);
-    else removeFromSaved(workout.id);
-    toast(`${workout.name} removed`);
+    if (activeTab === "plan") {
+      removeFromPlan(workout.id);
+      toast(`${workout.name} removed from today's plan`);
+    } else {
+      removeFromSaved(workout.id);
+      toast(`${workout.name} removed from saved`);
+    }
   };
 
   return (
@@ -61,10 +64,7 @@ export default function MyPlanPage() {
       {/* Metrics */}
       <div className="grid grid-cols-3 rounded-2xl border border-[#232732] bg-[#13161d] px-4 py-6 sm:px-6 sm:pt-8">
         {metrics.map((metric, index) => (
-          <div
-            key={metric.label}
-            className={index !== 0 ? "border-l border-[#232732] pl-4 sm:pl-8" : ""}
-          >
+          <div key={metric.label} className={index !== 0 ? "border-l border-[#232732] pl-4 sm:pl-8" : ""}>
             <p className="mb-1 text-xs text-[#8a92a0]">{metric.label}</p>
             <p className={`font-display text-2xl font-bold sm:text-4xl ${metric.highlight ? "text-[#ccff00]" : "text-white"}`}>
               {metric.value}
@@ -91,20 +91,30 @@ export default function MyPlanPage() {
           ))}
         </div>
 
-        <label className="flex items-center gap-3 text-xs text-[#8a92a0]">
-          Sort By
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="rounded-[9px] border border-[#232732] bg-[#13161d] px-3 py-2 text-xs text-white outline-none focus:border-neon/50"
-          >
-            {SORT_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="flex items-center gap-3">
+          <label htmlFor="sort" className="text-xs text-[#8a92a0]">Sort By</label>
+          <div className="relative">
+            <select
+              id="sort"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="cursor-pointer appearance-none rounded-[9px] border border-[#232732] bg-[#13161d] py-2 pl-4 pr-9 text-xs text-white outline-none transition focus:border-neon/50"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <svg
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white"
+              width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </div>
+        </div>
       </div>
 
       {/* List / Loading / Empty */}
@@ -131,6 +141,7 @@ export default function MyPlanPage() {
               key={workout.id}
               workout={workout}
               showDone={activeTab === "plan"}
+              isDone={isDone(workout.id)}
               onDone={handleDone}
               onRemove={handleRemove}
             />
