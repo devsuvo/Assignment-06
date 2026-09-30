@@ -2,6 +2,7 @@ import { Inter, Oswald } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { PlanProvider } from "@/context/PlanContext";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -15,10 +16,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark">
-      <body className={`${inter.variable} ${oswald.variable} min-h-screen bg-ink font-sans text-white antialiased`}>
+      <body className={`${inter.variable} ${oswald.variable} flex min-h-screen flex-col bg-ink font-sans text-white antialiased`}>
         <PlanProvider>
           <Navbar />
-          <main>{children}</main>
+          <main className="flex-1">{children}</main>
+          <Footer />
           <Toaster
             position="bottom-right"
             toastOptions={{
